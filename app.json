@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "MHub",
+    "slug": "MHub",
+    "version": "1.0.0",
+    "newArchEnabled": true,
+    "plugins": [
+      "react-native-video",
+      "expo-video"
+    ],
+    "android": {
+      "permissions": [],
+      "package": "com.anonymous.MHub"
+    }
+  }
+}
