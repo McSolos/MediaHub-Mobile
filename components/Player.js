@@ -4,17 +4,17 @@ import { Video } from 'expo-av';
 import Slider from '@react-native-community/slider';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
-const { width: screenWidth } = Dimensions.get('window'); // Get the screen width
-const videoHeight = screenWidth * (9 / 16); // Calculate height based on 16:9 ratio
+const { width: screenWidth } = Dimensions.get('window'); // Get phone width
+const videoHeight = screenWidth * (9 / 16); // calcs dim per screen width
 
 const Player = () => {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(true); // State to manage play/pause
   const [volume, setVolume] = useState(1.0); // State to manage volume
   const [isFullscreen, setIsFullscreen] = useState(false); // State for fullscreen mode
-  const background = { uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }; // Video URL
+  const background = { uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }; 
 
-  // Handle play/pause toggle
+  // Handle play/pause function
   const togglePlayPause = () => {
     if (isPlaying) {
       videoRef.current.pauseAsync();
@@ -24,7 +24,7 @@ const Player = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // Handle fullscreen toggle
+  // fullscreen function
   const toggleFullscreen = async () => {
     if (isFullscreen) {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -49,12 +49,12 @@ const Player = () => {
       />
       
       <View style={styles.controls}>
-        {/* Play/Pause Button */}
+        {/* Play/Pause Button .......need to maek it better */}
         <TouchableOpacity onPress={togglePlayPause} style={styles.controlButton}>
           <Text style={styles.controlText}>{isPlaying ? 'Pause' : 'Play'}</Text>
         </TouchableOpacity>
 
-        {/* Volume Control */}
+        {/*for Volume Control */}
         <Slider
           style={styles.volumeSlider}
           minimumValue={0}
@@ -63,7 +63,7 @@ const Player = () => {
           onValueChange={setVolume}
         />
 
-        {/* Fullscreen Button */}
+        {/* Fullscreen Button (wrong approach but basic idea for flip)*/}
         <TouchableOpacity onPress={toggleFullscreen} style={styles.controlButton}>
           <Text style={styles.controlText}>{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</Text>
         </TouchableOpacity>
