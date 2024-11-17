@@ -148,8 +148,10 @@
 |-- App.js
 |-- app.json
 |-- assets
+    |-- ipnx-media-hub-logo.png
     |-- soemthing.mp4
 |-- components
+    |-- CurvyBottomNav.js
     |-- Player.js
     |-- VideoPlayer.js
 |-- index.js
@@ -183,5 +185,5 @@
 |-- package-lock.json
 |-- package.json
 |-- pages
-    |-- PlayPage.js
+    |-- Home.js
 |-- README.md
