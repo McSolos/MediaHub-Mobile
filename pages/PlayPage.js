@@ -5,10 +5,9 @@ import Player from '../components/Player';
 const PlayPage = () => {
   return (
     <View style={styles.container}>
-      {/* Video Player at the top */}
       <Player />
 
-      {/* Scrollable content for video details and comments */}
+      {/* Scrollable content for video details  */}
       <ScrollView style={styles.content}>
         <Text style={styles.title}>Video Title</Text>
         <Text style={styles.description}>
@@ -16,11 +15,6 @@ const PlayPage = () => {
         </Text>
         <Text style={styles.commentsTitle}>Comments</Text>
         
-        {/* Sample comments */}
-        <Text style={styles.comment}>Comment 1: Amazing video!</Text>
-        <Text style={styles.comment}>Comment 2: Very informative, thanks!</Text>
-        <Text style={styles.comment}>Comment 3: I loved this part...</Text>
-        {/* Add more comments if needed */}
       </ScrollView>
     </View>
   );
