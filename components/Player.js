@@ -37,6 +37,7 @@ const Player = () => {
   return (
     <View style={[styles.videoContainer, isFullscreen && styles.fullscreenContainer]}>
       <Video
+      
         ref={videoRef}
         source={background}
         rate={1.0}

@@ -16,7 +16,7 @@ const VideoPlayer = ({ uri }) => {
         onBuffer={(e) => console.log("Buffering: ", e)}
         onLoadStart={() => console.log("Loading video...")}
         onLoad={() => console.log("Video loaded")}
-        autoplay 
+        // autoplay 
         paused={false}
       />
     </View>
