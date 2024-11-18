@@ -2,12 +2,26 @@ import React from 'react';
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import Material Icons
 import Player from '../components/Player';
-// import NavBar from '../components/CurvyBottomNav';
+import ContentRow from '../components/ContentRow';
 
 const Home = () => {
   const categories = [
     'cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6',
     'cat7', 'cat8', 'cat9', 'cat10', 'cat11', 'cat12',
+  ];
+
+  const trendingVideos = [
+    { id: 1, title: 'Trending Video 1', thumbnail: 'https://via.placeholder.com/150' },
+    { id: 2, title: 'Trending Video 2', thumbnail: 'https://via.placeholder.com/150' },
+    { id: 3, title: 'Trending Video 3', thumbnail: 'https://via.placeholder.com/150' },
+    // Add more video objects here
+  ];
+
+  const topPicksVideos = [
+    { id: 1, title: 'Top Pick 1', thumbnail: 'https://via.placeholder.com/150' },
+    { id: 2, title: 'Top Pick 2', thumbnail: 'https://via.placeholder.com/150' },
+    { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150' },
+    // Add more video objects here
   ];
 
   return (
@@ -30,15 +44,19 @@ const Home = () => {
       </View>
 
       {/* Video Player */}
-      <Player />
-
-      {/* Scrollable Content */}
-      <ScrollView style={styles.content}>
+      <View>
+        <Player />
+      <ScrollView style={styles.titleContent}>
         <Text style={styles.title}>Video Title</Text>
-        {/* <Text style={styles.description}>
-          This is a description of the video. It includes details like the number of views, upload date, and other information.
-        </Text>
-        <Text style={styles.commentsTitle}>Comments</Text> */}
+      </ScrollView>
+      </View>
+      {/* Content Rows */}
+      <ScrollView style={styles.content}>
+        <Text style={styles.sectionTitle}>Trending Now</Text>
+        <ContentRow videos={trendingVideos} />
+
+        <Text style={styles.sectionTitle}>Top Picks For You</Text>
+        <ContentRow videos={topPicksVideos} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -52,22 +70,22 @@ const styles = StyleSheet.create({
   scrollWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 40, // Adjust height to fit the buttons and arrows snugly
-    paddingHorizontal: 8, // Add padding to accommodate arrows
+    height: 40,
+    paddingHorizontal: 20,
   },
   scrollContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   arrow: {
-    paddingHorizontal: 4, // Add some padding around the arrows
+    paddingHorizontal: 4,
   },
   button: {
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: '#2c2c2c',
     borderRadius: 5,
-    marginHorizontal: 1, // Reduce spacing between buttons
+    marginHorizontal: 1,
   },
   buttonText: {
     color: '#fff',
@@ -78,17 +96,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'white',
+  },
+  titleContent: {
+    paddingHorizontal: 16,
+    paddingVertical: 1,
+    
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 8,
     color: 'red',
-  },
-  description: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 16,
-    color: 'white',
   },
 });
 

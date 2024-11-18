@@ -148,9 +148,11 @@
 |-- App.js
 |-- app.json
 |-- assets
+    |-- 31TqBcQUlcL.png
     |-- ipnx-media-hub-logo.png
     |-- soemthing.mp4
 |-- components
+    |-- ContentRow.js
     |-- CurvyBottomNav.js
     |-- Player.js
     |-- VideoPlayer.js
@@ -184,6 +186,7 @@
 |-- metro.config.js
 |-- package-lock.json
 |-- package.json
-|-- pages
-    |-- Home.js
 |-- README.md
+|-- screen
+    |-- Home.js
+    |-- LiveTv.js

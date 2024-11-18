@@ -15,7 +15,7 @@ const CurvyBottomNav = () => {
       <FontAwesome name="home" size={24} color="#fff" />
         <Text style={styles.label}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('LiveTv')}>
         <FontAwesome name="tv" size={24} color="#fff" />
         <Text style={styles.label}>LiveTV</Text>
       </TouchableOpacity>

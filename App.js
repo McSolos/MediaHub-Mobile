@@ -3,7 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, Button, SafeAreaView, Image } from 'react-native';
 import Navbar from './components/CurvyBottomNav';
-import Home from './pages/Home';
+import Home from './screen/Home';
+import LiveTv from './screen/LiveTv';
+
 
 const Stack = createStackNavigator();
 
@@ -23,11 +25,12 @@ export default function App() {
                 source={require('./assets/ipnx-media-hub-logo.png')} 
                 style={{ width: 100, height: 40, resizeMode: 'contain' }} 
          />
-    ),
-    headerStyle: { backgroundColor: 'black' }, 
-  }} 
-/>
+          ),
+          headerStyle: { backgroundColor: '#0c0a00' }, 
+        }} 
+      />
 
+      <Stack.Screen name="LiveTv" component={LiveTv} />
       </Stack.Navigator>
       <Navbar/>
     </NavigationContainer>
