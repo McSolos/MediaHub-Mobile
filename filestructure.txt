@@ -191,5 +191,6 @@
     |-- Home.js
     |-- LiveTv.js
     |-- Others.js
+    |-- Play.js
     |-- Search.js
     |-- TvGuide.js

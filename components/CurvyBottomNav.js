@@ -5,7 +5,9 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const CurvyBottomNav = () => {
   const navigation = useNavigation();
-  const currentRouteName = useNavigationState((state) => state.routes[state.index].name); // Get current route name
+  
+  // Get the current route name or fallback to an empty string if state is undefined
+  const currentRouteName = useNavigationState((state) => state?.routes[state.index]?.name || '');
 
   const getIconColor = (routeName) => {
     return currentRouteName === routeName ? 'red' : '#fff'; // Red for active, white for inactive
@@ -17,7 +19,7 @@ const CurvyBottomNav = () => {
         <FontAwesome name="home" size={24} color={getIconColor('Home')} />
         <Text style={[styles.label, { color: getIconColor('Home') }]}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('LiveTv')}>
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Play')}>
         <FontAwesome name="tv" size={24} color={getIconColor('LiveTv')} />
         <Text style={[styles.label, { color: getIconColor('LiveTv') }]}>LiveTV</Text>
       </TouchableOpacity>

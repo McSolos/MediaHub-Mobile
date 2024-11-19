@@ -5,6 +5,7 @@ import { StyleSheet, View, Button, SafeAreaView, Image } from 'react-native';
 import Navbar from './components/CurvyBottomNav';
 import Home from './screen/Home';
 import LiveTv from './screen/LiveTv';
+import Play from './screen/Play';
 
 
 const Stack = createStackNavigator();
@@ -31,8 +32,8 @@ export default function App() {
       />
 
       <Stack.Screen 
-        name="LiveTv" 
-        component={LiveTv} 
+        name="Play" 
+        component={Play} 
         options={{
           headerStyle: {
             backgroundColor: '#0c0a00', // Background color of the header (optional)
