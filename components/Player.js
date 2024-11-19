@@ -1,20 +1,32 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { StyleSheet, View, Dimensions, Text, TouchableOpacity } from 'react-native';
 import { Video } from 'expo-av';
 import Slider from '@react-native-community/slider';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { useIsFocused } from '@react-navigation/native';
 
-const { width: screenWidth } = Dimensions.get('window'); // Get phone width
-const videoHeight = screenWidth * (9 / 16); // calcs dim per screen width
+const { width: screenWidth } = Dimensions.get('window');
+const videoHeight = screenWidth * (9 / 16);
 
 const Player = () => {
   const videoRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(true); // State to manage play/pause
-  const [volume, setVolume] = useState(1.0); // State to manage volume
-  const [isFullscreen, setIsFullscreen] = useState(false); // State for fullscreen mode
-  const background = { uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }; 
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [volume, setVolume] = useState(1.0);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const isFocused = useIsFocused(); // Tracks if the screen is focused
+  const background = { uri: 'https://www.w3schools.com/html/mov_bbb.mp4' };
 
-  // Handle play/pause function
+  useEffect(() => {
+    if (isFocused) {
+      videoRef.current?.playAsync();
+    } else {
+      videoRef.current?.pauseAsync();
+    }
+    return () => {
+      videoRef.current?.stopAsync();
+    };
+  }, [isFocused]);
+
   const togglePlayPause = () => {
     if (isPlaying) {
       videoRef.current.pauseAsync();
@@ -24,7 +36,6 @@ const Player = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // fullscreen function
   const toggleFullscreen = async () => {
     if (isFullscreen) {
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -37,7 +48,6 @@ const Player = () => {
   return (
     <View style={[styles.videoContainer, isFullscreen && styles.fullscreenContainer]}>
       <Video
-      
         ref={videoRef}
         source={background}
         rate={1.0}
@@ -45,17 +55,13 @@ const Player = () => {
         isMuted={false}
         shouldPlay={isPlaying}
         isLooping
-        resizeMode="contain" // Set to "contain" or "cover"
+        resizeMode="contain"
         style={styles.video}
       />
-      
       <View style={styles.controls}>
-        {/* Play/Pause Button .......need to maek it better */}
         <TouchableOpacity onPress={togglePlayPause} style={styles.controlButton}>
           <Text style={styles.controlText}>{isPlaying ? 'Pause' : 'Play'}</Text>
         </TouchableOpacity>
-
-        {/*for Volume Control */}
         <Slider
           style={styles.volumeSlider}
           minimumValue={0}
@@ -63,8 +69,6 @@ const Player = () => {
           value={volume}
           onValueChange={setVolume}
         />
-
-        {/* Fullscreen Button (wrong approach but basic idea for flip)*/}
         <TouchableOpacity onPress={toggleFullscreen} style={styles.controlButton}>
           <Text style={styles.controlText}>{isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}</Text>
         </TouchableOpacity>

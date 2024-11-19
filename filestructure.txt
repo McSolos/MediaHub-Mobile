@@ -190,3 +190,6 @@
 |-- screen
     |-- Home.js
     |-- LiveTv.js
+    |-- Others.js
+    |-- Search.js
+    |-- TvGuide.js

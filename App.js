@@ -30,7 +30,19 @@ export default function App() {
         }} 
       />
 
-      <Stack.Screen name="LiveTv" component={LiveTv} />
+      <Stack.Screen 
+        name="LiveTv" 
+        component={LiveTv} 
+        options={{
+          headerStyle: {
+            backgroundColor: '#0c0a00', // Background color of the header (optional)
+          },
+          headerTintColor: '#fff', // Text color of the header
+          headerTitleStyle: {
+            fontWeight: 'bold', // Optional styling for the header title
+          },
+        }}
+      />
       </Stack.Navigator>
       <Navbar/>
     </NavigationContainer>
