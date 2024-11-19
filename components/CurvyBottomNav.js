@@ -1,33 +1,35 @@
-// components/CurvyBottomNav.js
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { useNavigation } from '@react-navigation/native';
-// import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const CurvyBottomNav = () => {
   const navigation = useNavigation();
+  const currentRouteName = useNavigationState((state) => state.routes[state.index].name); // Get current route name
+
+  const getIconColor = (routeName) => {
+    return currentRouteName === routeName ? 'red' : '#fff'; // Red for active, white for inactive
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Home')}>
-      <FontAwesome name="home" size={24} color="#fff" />
-        <Text style={styles.label}>Home</Text>
+        <FontAwesome name="home" size={24} color={getIconColor('Home')} />
+        <Text style={[styles.label, { color: getIconColor('Home') }]}>Home</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('LiveTv')}>
-        <FontAwesome name="tv" size={24} color="#fff" />
-        <Text style={styles.label}>LiveTV</Text>
+        <FontAwesome name="tv" size={24} color={getIconColor('LiveTv')} />
+        <Text style={[styles.label, { color: getIconColor('LiveTv') }]}>LiveTV</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.centralButton} onPress={() => navigation.navigate('')}>
         <FontAwesome name="search" size={30} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="guide" size={24} color="#fff" />
+        <FontAwesome name="guide" size={24} color={getIconColor('')} />
         <Text style={styles.label}>TV Guide</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="bars" size={24} color="#fff" />
+        <FontAwesome name="bars" size={24} color={getIconColor('')} />
         <Text style={styles.label}>More</Text>
       </TouchableOpacity>
     </View>
@@ -60,8 +62,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#fff',
     marginTop: 4,
+    color: '#fff',
   },
   centralButton: {
     width: 60,
@@ -76,10 +78,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 6,
     elevation: 8,
-  },
-  centralIcon: {
-    fontSize: 30,
-    color: '#000',
   },
 });
 
