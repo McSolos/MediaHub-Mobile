@@ -6,8 +6,8 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 const CurvyBottomNav = () => {
   const navigation = useNavigation();
   
-  // Get the current route name or fallback to an empty string if state is undefined
-  const currentRouteName = useNavigationState((state) => state?.routes[state.index]?.name || '');
+  // Get the current route name or fallback to 'Home' if state is undefined
+  const currentRouteName = useNavigationState((state) => state?.routes[state.index]?.name || 'Home');
 
   const getIconColor = (routeName) => {
     return currentRouteName === routeName ? 'red' : '#fff'; // Red for active, white for inactive
@@ -19,7 +19,7 @@ const CurvyBottomNav = () => {
         <FontAwesome name="home" size={24} color={getIconColor('Home')} />
         <Text style={[styles.label, { color: getIconColor('Home') }]}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Play')}>
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('LiveTv')}>
         <FontAwesome name="tv" size={24} color={getIconColor('LiveTv')} />
         <Text style={[styles.label, { color: getIconColor('LiveTv') }]}>LiveTV</Text>
       </TouchableOpacity>
@@ -27,11 +27,11 @@ const CurvyBottomNav = () => {
         <FontAwesome name="search" size={30} color="#000" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="guide" size={24} color={getIconColor('')} />
+        <FontAwesome name="guide" size={24} color={getIconColor('TV Guide')} />
         <Text style={styles.label}>TV Guide</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="bars" size={24} color={getIconColor('')} />
+        <FontAwesome name="bars" size={24} color={getIconColor('More')} />
         <Text style={styles.label}>More</Text>
       </TouchableOpacity>
     </View>

@@ -10,15 +10,37 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const LiveTv = () => {
-
-  const categories = [  'RecentlyWatched','All Channels', 'News & Commerce','Sports','General Entertainment', 'Music', 'Cartoons'];
+const LiveTv = ({ navigation }) => {
+  const categories = [
+    'RecentlyWatched',
+    'All Channels',
+    'News & Commerce',
+    'Sports',
+    'General Entertainment',
+    'Music',
+    'Cartoons',
+  ];
 
   const categoryData = {
     RecentlyWatched: [
-      { id: 1, title: 'Trending Video 1', thumbnail: 'https://via.placeholder.com/150' },
-      { id: 2, title: 'Trending Video 2', thumbnail: 'https://via.placeholder.com/150' },
-      { id: 3, title: 'Trending Video 3', thumbnail: 'https://via.placeholder.com/150' },
+      {
+        id: 1,
+        title: 'Trending Video 1',
+        thumbnail: 'https://via.placeholder.com/150',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      },
+      {
+        id: 2,
+        title: 'Trending Video 2',
+        thumbnail: 'https://via.placeholder.com/150',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      },
+      {
+        id: 3,
+        title: 'Trending Video 3',
+        thumbnail: 'https://via.placeholder.com/150',
+        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+      },
     ],
     Cartoons: [
       { id: 1, title: 'Top Pick 1', thumbnail: 'https://via.placeholder.com/150' },
@@ -27,14 +49,11 @@ const LiveTv = () => {
     ],
   };
 
-  const [activeCategory, setActiveCategory] = useState(categories[0]); // Default to first category which is the first one in the array (0)
+  const [activeCategory, setActiveCategory] = useState(categories[0]);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Scrollable Categories */}
       <View style={styles.scrollWrapper}>
-        {/* <Icon name="arrow-back-ios" size={20} color="#4a90e2" style={styles.arrow} /> */}
-
         <ScrollView
           horizontal
           contentContainerStyle={styles.scrollContainer}
@@ -45,9 +64,9 @@ const LiveTv = () => {
               key={index}
               style={[
                 styles.button,
-                activeCategory === category && styles.activeButton, // active button
+                activeCategory === category && styles.activeButton,
               ]}
-              onPress={() => setActiveCategory(category)} // Set active category
+              onPress={() => setActiveCategory(category)}
             >
               <Text
                 style={[
@@ -64,13 +83,20 @@ const LiveTv = () => {
         <Icon name="arrow-forward-ios" size={20} color="#4a90e2" style={styles.arrow} />
       </View>
 
-      {/* Content ScrollView */}
       <ScrollView style={styles.contentScrollView}>
         {categoryData[activeCategory].map((item) => (
-          <View key={item.id} style={styles.contentItem}>
+          <TouchableOpacity
+            key={item.id}
+            style={styles.contentItem}
+            onPress={() =>
+              navigation.navigate('Play', {
+                videoDetails: item,
+              })
+            }
+          >
             <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
             <Text style={styles.title}>{item.title}</Text>
-          </View>
+          </TouchableOpacity>
         ))}
       </ScrollView>
     </SafeAreaView>
@@ -81,6 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2C2C2C',
+    paddingBottom: 80, // Account for the bottom navigation bar height
   },
   scrollWrapper: {
     flexDirection: 'row',

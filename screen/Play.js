@@ -1,32 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
+import { StatusBar } from 'expo-status-bar';
+import { useIsFocused } from '@react-navigation/native';
 
-const Play = ({ navigation, route }) => {
+const Play = ({ route }) => {
+  const videoRef = useRef(null);  // Only using one ref for the video
+  const isFocused = useIsFocused(); // Tracks if the screen is focused
+
+  const { videoDetails } = route.params;
   const { width, height } = Dimensions.get('screen');
-  const data = 'cow dick';	
-  const title =  'something something';
+  const [status, setStatus] = useState({});
 
   useEffect(() => {
-    console.log(data, 'and', title);
-  }, []);
+    if (isFocused) {
+      // Play the video when the screen is focused
+      videoRef.current?.playAsync();
+    } else {
+      // Pause the video when the screen is not focused
+      videoRef.current?.pauseAsync();
+    }
+    
+    return () => {
+      // Ensure to stop the video when the component unmounts or when it loses focus
+      videoRef.current?.stopAsync();
+    };
+  }, [isFocused]);
 
-  return ( 
+  return (
     <View style={styles.mainPlayerView}>
       <View style={[styles.videoContainer, { height: height / 3 }]}>
         <Video
-        controls={true}
+          ref={videoRef}  // Use the videoRef here
+          source={{ uri: videoDetails.url }}
           style={styles.video}
-          source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
-        //   rate={1.0}
-        //   volume={1.0}
-        //   isMuted={false}
-          resizeMode="contain" // Ensures proper scaling
-        //   shouldPlay // Automatically plays the video
+          useNativeControls
+          resizeMode="contain"
+          isLooping
+          shouldPlay
+          onPlaybackStatusUpdate={setStatus}
         />
       </View>
-      <Text style={styles.postTitle}>{title}</Text>
-      <Text style={styles.postSubtitle}>{data}</Text>
+      <Text style={styles.title}>{videoDetails.title}</Text>
+      <StatusBar style="auto" />
     </View>
   );
 };
@@ -40,23 +56,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   videoContainer: {
-    width: '100%', // Ensure full width
+    width: '100%',
     backgroundColor: 'grey',
   },
   video: {
-    flex: 1, // Ensures the video fills the parent container
-    width: '100%', // Full width
-    height: '100%', // Full height
+    flex: 1,
+    width: '100%',
+    height: '100%',
   },
-  postTitle: {
+  title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
-    paddingTop: 20,
-  },
-  postSubtitle: {
-    fontSize: 20,
-    color: '#555',
-    paddingTop: 10,
+    marginTop: 10,
   },
 });
