@@ -5,8 +5,19 @@
     "version": "1.0.0",
     "newArchEnabled": true,
     "plugins": [
+      [
+     
       "react-native-video",
-      "expo-video"
+      {
+        "enableNotificationControls": true,
+        "androidExtensions": {
+          "useExoplayerRtsp": false,
+          "useExoplayerSmoothStreaming": false,
+          "useExoplayerHls": false,
+          "useExoplayerDash": false
+        }
+      }
+    ]
     ],
     "android": {
       "permissions": [],
