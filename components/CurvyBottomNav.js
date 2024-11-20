@@ -5,7 +5,9 @@ import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const CurvyBottomNav = () => {
   const navigation = useNavigation();
-  const currentRouteName = useNavigationState((state) => state.routes[state.index].name); // Get current route name
+  
+  // Get the current route name or fallback to an empty string if state is undefined
+  const currentRouteName = useNavigationState((state) => state?.routes[state.index]?.name || '');
 
   const getIconColor = (routeName) => {
     return currentRouteName === routeName ? 'red' : '#fff'; // Red for active, white for inactive

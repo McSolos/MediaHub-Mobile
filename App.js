@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, View, Button, SafeAreaView, Image } from 'react-native';
-import Navbar from './components/CurvyBottomNav';
+import CurvyBottomNav from './components/CurvyBottomNav';
 import Home from './screen/Home';
 import LiveTv from './screen/LiveTv';
 
@@ -44,7 +44,7 @@ export default function App() {
         }}
       />
       </Stack.Navigator>
-      <Navbar/>
+      <CurvyBottomNav/>
     </NavigationContainer>
     
     </SafeAreaView>
