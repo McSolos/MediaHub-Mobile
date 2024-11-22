@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, StatusBar, SafeAreaView } from 'react-native';
 import { Video } from 'expo-av';
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import { useIsFocused } from '@react-navigation/native';
 
 const Play = ({ route }) => {
@@ -28,7 +28,8 @@ const Play = ({ route }) => {
   }, [isFocused]);
 
   return (
-    <View style={styles.mainPlayerView}>
+    <SafeAreaView style={styles.mainPlayerView}>
+      <StatusBar barStyle="light-content" backgroundColor="blue" />
       <View style={[styles.videoContainer, { height: height / 3 }]}>
         <Video
           ref={videoRef}  // Use the videoRef here
@@ -42,8 +43,7 @@ const Play = ({ route }) => {
         />
       </View>
       <Text style={styles.title}>{videoDetails.title}</Text>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 };
 
