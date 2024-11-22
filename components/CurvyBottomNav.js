@@ -9,8 +9,16 @@ const CurvyBottomNav = () => {
   // Get the current route name or fallback to 'Home' if state is undefined
   const currentRouteName = useNavigationState((state) => state?.routes[state.index]?.name || 'Home');
 
+  console.log("Current Route:", currentRouteName);  // Log current route name for debugging
+
   const getIconColor = (routeName) => {
-    return currentRouteName === routeName ? 'red' : '#fff'; // Red for active, white for inactive
+    // For "Search", set the default color to black unless it's the active route
+    if (routeName === 'Search') {
+      return currentRouteName === 'Search' ? 'red' : '#000'; // Red for active, black for inactive
+    }
+
+    // For other routes, set the color to red for active and white for inactive
+    return currentRouteName === routeName ? 'red' : '#fff';
   };
 
   return (
@@ -23,15 +31,15 @@ const CurvyBottomNav = () => {
         <FontAwesome name="tv" size={24} color={getIconColor('LiveTv')} />
         <Text style={[styles.label, { color: getIconColor('LiveTv') }]}>LiveTV</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.centralButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="search" size={30} color="#000" />
+      <TouchableOpacity style={styles.centralButton} onPress={() => navigation.navigate('Search')}>
+        <FontAwesome name="search" size={30} color={getIconColor('Search')} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="guide" size={24} color={getIconColor('TV Guide')} />
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('TvGuide')}>
+        <FontAwesome name="guide" size={24} color={getIconColor('TvGuide')} />
         <Text style={styles.label}>TV Guide</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('')}>
-        <FontAwesome name="bars" size={24} color={getIconColor('More')} />
+      <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Others')}>
+        <FontAwesome name="bars" size={24} color={getIconColor('Others')} />
         <Text style={styles.label}>More</Text>
       </TouchableOpacity>
     </View>
