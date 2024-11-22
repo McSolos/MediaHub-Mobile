@@ -687,7 +687,6 @@
     |-- ContentRow.js
     |-- CurvyBottomNav.js
     |-- Player.js
-    |-- VideoPlayer.js
 |-- index.js
 |-- ios
     |-- .gitignore

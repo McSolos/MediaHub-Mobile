@@ -27,7 +27,7 @@ const LiveTv = ({ navigation }) => {
         id: 1,
         title: 'Trending Video 1',
         thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+        url: '',
       },
       {
         id: 2,
