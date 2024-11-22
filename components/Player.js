@@ -30,7 +30,7 @@ const Player = () => {
     <View style={styles.videoContainer}>
       <Video
         ref={videoRef}
-        source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
+        // source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
         style={styles.video}
         useNativeControls
         resizeMode="contain" // Scale the video properly

@@ -1,10 +1,14 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, View, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, Image } from 'react-native';
+
 import Navbar from './components/CurvyBottomNav';
 import Home from './screen/Home';
 import LiveTv from './screen/LiveTv';
+import Search from './screen/Search';
+import TvGuide from './screen/TvGuide';
+import Others from './screen/Others';
 import Play from './screen/Play';
 
 const Stack = createStackNavigator();
@@ -31,18 +35,39 @@ export default function App() {
             name="LiveTv" 
             component={LiveTv} 
             options={{
-              headerShown: false
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen 
+            name="Search" 
+            component={Search} 
+            options={{
+              headerShown: false, 
+            }}
+          />
+          <Stack.Screen 
+            name="TvGuide" 
+            component={TvGuide}  
+            options={{
+              headerShown: false, 
+            }}
+          />
+          <Stack.Screen 
+            name="Others" 
+            component={Others} 
+            options={{
+              headerShown: false, 
             }}
           />
           <Stack.Screen 
             name="Play" 
             component={Play} 
             options={{
-              headerShown: false 
+              headerShown: false, 
             }}
           />
         </Stack.Navigator>
-        <Navbar/>
+        <Navbar />
       </NavigationContainer>
     </SafeAreaView>
   );

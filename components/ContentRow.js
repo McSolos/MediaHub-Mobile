@@ -1,11 +1,18 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
 
-const ContentRow = ({ videos }) => {
+const ContentRow = ({ navigation, videos }) => {
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.container}>
       {videos.map((video) => (
-        <TouchableOpacity key={video.id} style={styles.card}>
+        <TouchableOpacity
+          key={video.id}
+          style={styles.card}
+          onPress={() =>
+            navigation.navigate('Play', {
+              videoDetails: video, // Pass the current video object
+            })
+          }>
           <Image source={{ uri: video.thumbnail }} style={styles.thumbnail} />
           <Text style={styles.title}>{video.title}</Text>
         </TouchableOpacity>

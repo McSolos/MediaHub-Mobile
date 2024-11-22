@@ -1,31 +1,31 @@
 import React from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TouchableOpacity, SafeAreaView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import Material Icons
 import Player from '../components/Player';
 import ContentRow from '../components/ContentRow';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const categories = [
     'cat1', 'cat2', 'cat3', 'cat4', 'cat5', 'cat6',
     'cat7', 'cat8', 'cat9', 'cat10', 'cat11', 'cat12',
   ];
 
   const trendingVideos = [
-    { id: 1, title: 'Trending Video 1', thumbnail: 'https://via.placeholder.com/150' },
-    { id: 2, title: 'Trending Video 2', thumbnail: 'https://via.placeholder.com/150' },
-    { id: 3, title: 'Trending Video 3', thumbnail: 'https://via.placeholder.com/150' },
-    // Add more video objects here
+    { id: 1, title: 'Trending Video 1', thumbnail: 'https://via.placeholder.com/150', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+    { id: 2, title: 'Trending Video 2', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+    { id: 3, title: 'Trending Video 3', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4' },
   ];
-
+  
   const topPicksVideos = [
-    { id: 1, title: 'Top Pick 1', thumbnail: 'https://via.placeholder.com/150' },
-    { id: 2, title: 'Top Pick 2', thumbnail: 'https://via.placeholder.com/150' },
-    { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150' },
-    // Add more video objects here
+    { id: 1, title: 'Top Pick 1', thumbnail: 'https://via.placeholder.com/150', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+    { id: 2, title: 'Top Pick 2', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
+    { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
   ];
+  
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="red" />
       {/* Scrollable Categories with Arrows */}
       <View style={styles.scrollWrapper}>
         {/* Left Arrow */}
@@ -53,10 +53,10 @@ const Home = () => {
       {/* Content Rows */}
       <ScrollView style={styles.content}>
         <Text style={styles.sectionTitle}>Trending Now</Text>
-        <ContentRow videos={trendingVideos} />
+        <ContentRow videos={trendingVideos} navigation={navigation} />
 
         <Text style={styles.sectionTitle}>Top Picks For You</Text>
-        <ContentRow videos={topPicksVideos} />
+        <ContentRow videos={topPicksVideos} navigation={navigation} />
       </ScrollView>
     </SafeAreaView>
   );
