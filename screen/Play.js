@@ -78,7 +78,7 @@ const Play = ({ route }) => {
       <View style={[styles.videoContainer, { height: Dimensions.get('screen').height / 3 }]}>
         <Video
           ref={videoRef}
-          source={{ uri: currentVideo.url }}
+          source={{ uri: currentVideo.video_url }}
           style={styles.video}
           useNativeControls
           resizeMode="contain"
