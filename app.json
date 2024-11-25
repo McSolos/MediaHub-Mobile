@@ -1,27 +1,40 @@
 {
   "expo": {
     "name": "MHub",
+    "splash": {
+      "image": "./assets/splashscreen.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "slug": "MHub",
     "version": "1.0.0",
     "newArchEnabled": true,
     "plugins": [
       [
-     
-      "react-native-video",
-      {
-        "enableNotificationControls": true,
-        "androidExtensions": {
-          "useExoplayerRtsp": false,
-          "useExoplayerSmoothStreaming": false,
-          "useExoplayerHls": false,
-          "useExoplayerDash": false
+        "react-native-video",
+        {
+          "enableNotificationControls": true,
+          "androidExtensions": {
+            "useExoplayerRtsp": false,
+            "useExoplayerSmoothStreaming": false,
+            "useExoplayerHls": false,
+            "useExoplayerDash": false
+          }
         }
-      }
-    ]
+      ],
+      "expo-video"
     ],
     "android": {
-      "permissions": [],
+      "permissions": [
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ],
       "package": "com.anonymous.MHub"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ede21401-4934-4b83-a904-56c0dc284200"
+      }
     }
   }
 }

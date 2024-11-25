@@ -1,13 +1,53 @@
-import React from 'react'
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
+import BottomSlideModal from '../components/BottomSlideModal';
 
-function TvGuide() {
+const TvGuide = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => setModalVisible(true);
+  const closeModal = () => setModalVisible(false);
+
   return (
-    <View>
-        <Text>TV Guide</Text>
-      {/* Add TV guide content here */}
-    </View>
-  )
-}
+    <SafeAreaView style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={openModal}>
+        <Text style={styles.buttonText}>Open Modal</Text>
+      </TouchableOpacity>
 
-export default TvGuide
+      {/* <BottomSlideModal isVisible={isModalVisible} onClose={closeModal}>
+        <Text style={styles.modalText}>This is the modal content!</Text>
+      </BottomSlideModal> */}
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  button: {
+    backgroundColor: '#007BFF',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  modalText: {
+    fontSize: 18,
+    textAlign: 'center',
+  },
+});
+
+export default TvGuide;

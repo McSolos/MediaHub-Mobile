@@ -1,6 +1,8 @@
 |-- .expo
     |-- devices.json
+    |-- packager-info.json
     |-- README.md
+    |-- settings.json
 |-- .gitattributes
 |-- .gitignore
 |-- android
@@ -109,6 +111,38 @@
                                         |-- LibrariesForLibs.java
                                         |-- LibrariesForLibsInPluginsBlock.java
                 |-- 569c8b261a8a714d7731d5f568e0e5c05babae10-4ae94f1b-b6db-4b17-8623-3af993ee30c8
+                    |-- classes
+                        |-- org
+                            |-- gradle
+                                |-- accessors
+                                    |-- dm
+                                        |-- LibrariesForLibs$AndroidGradleLibraryAccessors.class
+                                        |-- LibrariesForLibs$AndroidLibraryAccessors.class
+                                        |-- LibrariesForLibs$BundleAccessors.class
+                                        |-- LibrariesForLibs$KotlinGradleLibraryAccessors.class
+                                        |-- LibrariesForLibs$KotlinLibraryAccessors.class
+                                        |-- LibrariesForLibs$KotlinPluginAccessors.class
+                                        |-- LibrariesForLibs$PluginAccessors.class
+                                        |-- LibrariesForLibs$VersionAccessors.class
+                                        |-- LibrariesForLibs.class
+                                        |-- LibrariesForLibsInPluginsBlock$AndroidGradleLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$AndroidLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$BundleAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinGradleLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinPluginAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$PluginAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$VersionAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock.class
+                    |-- metadata.bin
+                    |-- sources
+                        |-- org
+                            |-- gradle
+                                |-- accessors
+                                    |-- dm
+                                        |-- LibrariesForLibs.java
+                                        |-- LibrariesForLibsInPluginsBlock.java
+                |-- 569c8b261a8a714d7731d5f568e0e5c05babae10-525e3282-1869-4dca-9837-332cce40be5d
                     |-- classes
                         |-- org
                             |-- gradle
@@ -301,6 +335,38 @@
                                         |-- LibrariesForLibs.java
                                         |-- LibrariesForLibsInPluginsBlock.java
                 |-- 569c8b261a8a714d7731d5f568e0e5c05babae10-99a1023c-fa13-4403-819c-a849f0f4904c
+                    |-- classes
+                        |-- org
+                            |-- gradle
+                                |-- accessors
+                                    |-- dm
+                                        |-- LibrariesForLibs$AndroidGradleLibraryAccessors.class
+                                        |-- LibrariesForLibs$AndroidLibraryAccessors.class
+                                        |-- LibrariesForLibs$BundleAccessors.class
+                                        |-- LibrariesForLibs$KotlinGradleLibraryAccessors.class
+                                        |-- LibrariesForLibs$KotlinLibraryAccessors.class
+                                        |-- LibrariesForLibs$KotlinPluginAccessors.class
+                                        |-- LibrariesForLibs$PluginAccessors.class
+                                        |-- LibrariesForLibs$VersionAccessors.class
+                                        |-- LibrariesForLibs.class
+                                        |-- LibrariesForLibsInPluginsBlock$AndroidGradleLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$AndroidLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$BundleAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinGradleLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinLibraryAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$KotlinPluginAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$PluginAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock$VersionAccessors.class
+                                        |-- LibrariesForLibsInPluginsBlock.class
+                    |-- metadata.bin
+                    |-- sources
+                        |-- org
+                            |-- gradle
+                                |-- accessors
+                                    |-- dm
+                                        |-- LibrariesForLibs.java
+                                        |-- LibrariesForLibsInPluginsBlock.java
+                |-- 569c8b261a8a714d7731d5f568e0e5c05babae10-b5fa05d6-839a-471c-a72d-c0cbc92aa602
                     |-- classes
                         |-- org
                             |-- gradle
@@ -642,6 +708,7 @@
                     |-- drawable
                         |-- ic_launcher_background.xml
                         |-- rn_edit_text_material.xml
+                        |-- splashscreen.png
                     |-- drawable-hdpi
                     |-- drawable-mdpi
                     |-- drawable-xhdpi
@@ -683,37 +750,14 @@
     |-- 31TqBcQUlcL.png
     |-- ipnx-media-hub-logo.png
     |-- soemthing.mp4
+    |-- splashscreen.png
 |-- components
+    |-- BottomSlideModal.js
     |-- ContentRow.js
     |-- CurvyBottomNav.js
     |-- Player.js
+|-- eas.json
 |-- index.js
-|-- ios
-    |-- .gitignore
-    |-- .xcode.env
-    |-- MHub
-        |-- AppDelegate.h
-        |-- AppDelegate.mm
-        |-- Images.xcassets
-            |-- AppIcon.appiconset
-                |-- Contents.json
-            |-- Contents.json
-        |-- Info.plist
-        |-- main.m
-        |-- SplashScreen.storyboard
-        |-- Supporting
-            |-- Expo.plist
-    |-- MHub.xcodeproj
-        |-- project.pbxproj
-        |-- project.xcworkspace
-            |-- contents.xcworkspacedata
-            |-- xcshareddata
-                |-- IDEWorkspaceChecks.plist
-        |-- xcshareddata
-            |-- xcschemes
-                |-- MHub.xcscheme
-    |-- Podfile
-    |-- Podfile.properties.json
 |-- metro.config.js
 |-- package-lock.json
 |-- package.json
