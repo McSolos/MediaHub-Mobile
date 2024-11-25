@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Video } from 'expo-av';
 import { useIsFocused } from '@react-navigation/native';
@@ -6,36 +6,34 @@ import { useIsFocused } from '@react-navigation/native';
 const { width: screenWidth } = Dimensions.get('window');
 const videoHeight = screenWidth * (9 / 16);
 
-const Player = () => {
+const Player = ({ videoSource }) => {
   const videoRef = useRef(null);
-  const [status, setStatus] = useState({});
   const isFocused = useIsFocused(); // Tracks if the screen is focused
 
   useEffect(() => {
-    if (isFocused) {
-      // Play the video when the screen is focused
+    if (isFocused && videoSource) {
+      // Play the video when the screen is focused and there's a valid videoSource
       videoRef.current?.playAsync();
     } else {
-      // Pause the video when the screen is not focused
+      // Pause the video when the screen is not focused or no videoSource
       videoRef.current?.pauseAsync();
     }
     
     return () => {
-      // Ensure to stop the video when the component unmounts or when it loses focus
+      // Ensure to stop the video when the component unmounts or loses focus
       videoRef.current?.stopAsync();
     };
-  }, [isFocused]);
+  }, [isFocused, videoSource]);
 
   return (
     <View style={styles.videoContainer}>
       <Video
         ref={videoRef}
-        // source={{ uri: 'https://www.w3schools.com/html/mov_bbb.mp4' }}
+        source={{ uri: videoSource }}
         style={styles.video}
         useNativeControls
         resizeMode="contain" // Scale the video properly
         isLooping
-        onPlaybackStatusUpdate={setStatus}
       />
     </View>
   );
