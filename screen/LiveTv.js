@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,47 +9,49 @@ import {
   Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import axios from 'axios';
 
 const LiveTv = ({ navigation }) => {
   const categories = [
-    'RecentlyWatched',
-    'All Channels',
-    'News & Commerce',
-    'Sports',
-    'General Entertainment',
-    'Music',
-    'Cartoons',
+    { name: 'RecentlyWatched', apiParam: 'recently-watched' },
+    { name: 'All Channels', apiParam: 'all-channels' },
+    { name: 'News & Commerce', apiParam: 'news' },
+    { name: 'Sports', apiParam: 'sports' },
+    { name: 'Lifestyle and Travel', apiParam: 'lifestyle_travel' },
+    { name: 'Music', apiParam: 'music' },
+    { name: 'Kids', apiParam: 'children' },
+    { name: 'Documentaries', apiParam: 'documentary' },
+    { name: 'Religion', apiParam: 'religion' },
+    { name: 'Food', apiParam: 'food' },
   ];
 
-  const categoryData = {
-    RecentlyWatched: [
-      {
-        id: 1,
-        title: 'Trending Video 1',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: '',
-      },
-      {
-        id: 2,
-        title: 'Trending Video 2',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      },
-      {
-        id: 3,
-        title: 'Trending Video 3',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      },
-    ],
-    Cartoons: [
-      { id: 1, title: 'Top Pick 1', thumbnail: 'https://via.placeholder.com/150' },
-      { id: 2, title: 'Top Pick 2', thumbnail: 'https://via.placeholder.com/150' },
-      { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150' },
-    ],
+  const [activeCategory, setActiveCategory] = useState(categories[0].name);
+  const [videos, setVideos] = useState([]); // State for fetched videos
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  axios.defaults.withCredentials = true;
+  const fetchVideos = async (apiParam) => {
+    setLoading(true);
+    setError(false);
+    try {
+      const response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
+      setVideos(response.data); // Update state with fetched videos
+    } catch (error) {
+      console.error('Error fetching videos:', error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [activeCategory, setActiveCategory] = useState(categories[0]);
+  useEffect(() => {
+    // Fetch videos when activeCategory changes
+     
+    const currentCategory = categories.find((cat) => cat.name === activeCategory);
+    if (currentCategory) {
+      fetchVideos(currentCategory.apiParam);
+    }
+  }, [activeCategory]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -64,17 +66,17 @@ const LiveTv = ({ navigation }) => {
               key={index}
               style={[
                 styles.button,
-                activeCategory === category && styles.activeButton,
+                activeCategory === category.name && styles.activeButton,
               ]}
-              onPress={() => setActiveCategory(category)}
+              onPress={() => setActiveCategory(category.name)}
             >
               <Text
                 style={[
                   styles.buttonText,
-                  activeCategory === category && styles.activeButtonText,
+                  activeCategory === category.name && styles.activeButtonText,
                 ]}
               >
-                {category}
+                {category.name}
               </Text>
             </TouchableOpacity>
           ))}
@@ -84,20 +86,26 @@ const LiveTv = ({ navigation }) => {
       </View>
 
       <ScrollView style={styles.contentScrollView}>
-        {categoryData[activeCategory].map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={styles.contentItem}
-            onPress={() =>
-              navigation.navigate('Play', {
-                videoDetails: item,
-              })
-            }
-          >
-            <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
-            <Text style={styles.title}>{item.title}</Text>
-          </TouchableOpacity>
-        ))}
+        {loading ? (
+          <Text style={styles.loadingText}>Loading...</Text>
+        ) : error ? (
+          <Text style={styles.errorText}>Videos not found</Text>
+        ) :(
+          videos.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={styles.contentItem}
+              onPress={() =>
+                navigation.navigate('Play', {
+                  videoDetails: item,
+                })
+              }
+            >
+              <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
+              <Text style={styles.title}>{item.title}</Text>
+            </TouchableOpacity>
+          ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -107,7 +115,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#2C2C2C',
-    paddingBottom: 80, // Account for the bottom navigation bar height
+    paddingBottom: 80,
   },
   scrollWrapper: {
     flexDirection: 'row',
@@ -134,10 +142,10 @@ const styles = StyleSheet.create({
   },
   activeButton: {
     borderBottomWidth: 2,
-    borderBottomColor: 'red', // Red underline for active button
+    borderBottomColor: 'red',
   },
   activeButtonText: {
-    color: 'red', // Red text for active button
+    color: 'red',
   },
   contentScrollView: {
     flex: 1,
@@ -152,6 +160,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
   },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
+  },
   thumbnail: {
     width: 50,
     height: 50,
@@ -161,6 +175,12 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
     fontSize: 16,
+  },
+  loadingText: {
+    color: '#fff',
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
