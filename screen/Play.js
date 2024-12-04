@@ -9,56 +9,27 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import { Video } from 'expo-av';
+import axios from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 
 const Play = ({ route }) => {
-  const buttons = [
-    'Add to Favorites', 'Share', 'Report', 'cat4', 'cat5', 'cat6'
-  ];
-
-  const categoryData = {
-    RecentlyWatched: [
-      {
-        id: 1,
-        title: 'Trending Video 1',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      },
-      {
-        id: 2,
-        title: 'Trending Video 2',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
-      },
-      {
-        id: 3,
-        title: 'Trending Video 3',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      },
-      {
-        id: 4,
-        title: 'Trending Video 4',
-        thumbnail: 'https://via.placeholder.com/150',
-        url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-      },
-    ],
-  };
+  const buttons = ['Add to Favorites', 'Share', 'Report', 'cat4', 'cat5', 'cat6'];
 
   const videoRef = useRef(null); // Ref for the video player
   const isFocused = useIsFocused(); // Tracks if the screen is focused
   
   const { videoDetails } = route.params; // Video details passed from another page
-  // const { contentRow } = route.params;
-
   const { width, height } = Dimensions.get('screen');
 
   // State for the current video
   const [currentVideo, setCurrentVideo] = useState(videoDetails);
-  // const [currentVideo, setCurrentVideo] = useState(contentRow);	
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state for fetching videos
   const [status, setStatus] = useState({});
+  axios.defaults.withCredentials = true;
 
   useEffect(() => {
     if (isFocused) {
@@ -71,6 +42,25 @@ const Play = ({ route }) => {
       videoRef.current?.stopAsync(); // Ensure video stops on unmount
     };
   }, [isFocused]);
+
+  useEffect(() => {
+    const fetchVideos = async () => {
+      setLoading(true); // Start loading
+      try {
+        if (videoDetails) {
+          const apiParam = videoDetails.genre;
+          const response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
+          setVideos(response.data); 
+          console.log(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching videos:', error);
+      } finally {
+        setLoading(false); // Stop loading
+      }
+    };
+    fetchVideos();
+  }, [videoDetails]);
 
   return (
     <SafeAreaView style={styles.mainPlayerView}>
@@ -87,7 +77,6 @@ const Play = ({ route }) => {
         />
       </View>
       <Text style={styles.title}>{currentVideo.title}</Text>
-      {/* <Text style={styles.title}>{currentVideo.title}</Text> */}
 
       <View style={styles.scrollWrapper}>
         <ScrollView
@@ -103,17 +92,23 @@ const Play = ({ route }) => {
       </View>
 
       <ScrollView style={styles.contentScrollView}>
-        {categoryData.RecentlyWatched.map((cat) => (
-          <TouchableOpacity
-            key={cat.id}
-            style={styles.listItem}
-            onPress={() => setCurrentVideo(cat)}>
-            <Image source={{ uri: cat.thumbnail }} style={styles.thumbnail} />
-            <View style={styles.textContainer}>
-              <Text style={styles.videoTitle}>{cat.title}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
+        {loading ? (
+          <ActivityIndicator size="large" color="red" style={styles.loadingIndicator} />
+        ) : (
+          videos
+            .filter((cat) => cat.id !== currentVideo.id) // Exclude the current video
+            .map((cat) => (
+              <TouchableOpacity
+                key={cat.id}
+                style={styles.listItem}
+                onPress={() => setCurrentVideo(cat)}>
+                <Image source={{ uri: cat.thumbnail }} style={styles.thumbnail} />
+                <View style={styles.textContainer}>
+                  <Text style={styles.videoTitle}>{cat.title}</Text>
+                </View>
+              </TouchableOpacity>
+            ))
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -190,5 +185,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  loadingIndicator: {
+    marginVertical: 20,
+    alignSelf: 'center',
   },
 });

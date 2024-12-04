@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
@@ -14,7 +15,7 @@ import axios from 'axios';
 const LiveTv = ({ navigation }) => {
   const categories = [
     { name: 'RecentlyWatched', apiParam: 'recently-watched' },
-    { name: 'All Channels', apiParam: 'all-channels' },
+    { name: 'All Channels', apiParam: 'all' },
     { name: 'News & Commerce', apiParam: 'news' },
     { name: 'Sports', apiParam: 'sports' },
     { name: 'Lifestyle and Travel', apiParam: 'lifestyle_travel' },
@@ -34,8 +35,13 @@ const LiveTv = ({ navigation }) => {
     setLoading(true);
     setError(false);
     try {
+      if (apiParam === 'all'){
+      const response = await axios.get('http://localhost:8085/videos/');
+      setVideos(response.data); // Update state with fetched videos
+      }else{
       const response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
       setVideos(response.data); // Update state with fetched videos
+      }
     } catch (error) {
       console.error('Error fetching videos:', error);
       setError(true);
@@ -87,7 +93,7 @@ const LiveTv = ({ navigation }) => {
 
       <ScrollView style={styles.contentScrollView}>
         {loading ? (
-          <Text style={styles.loadingText}>Loading...</Text>
+          <ActivityIndicator size="large" color="red" style={styles.loadingIndicator} />
         ) : error ? (
           <Text style={styles.errorText}>Videos not found</Text>
         ) :(
@@ -176,11 +182,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
   },
-  loadingText: {
-    color: '#fff',
-    fontSize: 18,
-    textAlign: 'center',
-    marginTop: 20,
+  loadingIndicator: {
+    marginVertical: 20,
+    alignSelf: 'center',
   },
 });
 

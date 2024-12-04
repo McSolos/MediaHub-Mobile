@@ -25,18 +25,21 @@ const BottomSlideModal = ({ isVisible, onClose, data, onVideoPress }) => {
         <View style={styles.overlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContent}>
-                {/* <Text > </Text> */}
               <ScrollView>
-                {data.map((video) => (
-                  <TouchableOpacity
-                    key={video.id}
-                    style={styles.modalVideoItem}
-                    onPress={() => onVideoPress(video)}
-                  >
-                    <Image source={{ uri: video.thumbnail }} style={styles.modalThumbnail} />
-                    <Text style={styles.modalVideoTitle}>{video.title}</Text>
-                  </TouchableOpacity>
-                ))}
+                {data.length === 0 ? (
+                  <Text style={styles.noVideosText}>No video in this category</Text>
+                ) : (
+                  data.map((video) => (
+                    <TouchableOpacity
+                      key={video.id}
+                      style={styles.modalVideoItem}
+                      onPress={() => onVideoPress(video)}
+                    >
+                      <Image source={{ uri: video.thumbnail }} style={styles.modalThumbnail} />
+                      <Text style={styles.modalVideoTitle}>{video.title}</Text>
+                    </TouchableOpacity>
+                  ))
+                )}
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -76,6 +79,12 @@ const styles = StyleSheet.create({
   modalVideoTitle: {
     fontSize: 16,
     color: '#000',
+  },
+  noVideosText: {
+    fontSize: 18,
+    color: 'gray',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
