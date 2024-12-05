@@ -10,6 +10,7 @@ import Search from './screen/Search';
 import TvGuide from './screen/TvGuide';
 import Others from './screen/Others';
 import Play from './screen/Play';
+import Auth from './screen/Auth';
 
 const Stack = createStackNavigator();
 
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
+        <Stack.Navigator initialRouteName="Auth">
           <Stack.Screen 
             name="Home" 
             component={Home} 
@@ -66,8 +67,15 @@ export default function App() {
               headerShown: false, 
             }}
           />
+          <Stack.Screen 
+            name="Auth" 
+            component={Auth} 
+            options={{
+              headerShown: false,
+            }}
+          />
         </Stack.Navigator>
-        <Navbar />
+        {/* <Navbar /> */}
       </NavigationContainer>
     </SafeAreaView>
   );

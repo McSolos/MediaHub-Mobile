@@ -763,6 +763,8 @@
 |-- package.json
 |-- README.md
 |-- screen
+    |-- Auth.js
+    |-- dummy
     |-- Home.js
     |-- LiveTv.js
     |-- Others.js

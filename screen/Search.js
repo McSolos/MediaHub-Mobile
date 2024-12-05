@@ -6,15 +6,41 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 
 function Search() {
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = () => {
-    console.log('Search query:', query);
-    // Add search logic here
+  const handleSearch = async () => {
+    if (!query) return;
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`http://192.168.43.247:8085/videos/search?query=${query}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setResults(data.videos || []);
+      } else {
+        console.error('Error fetching search results:', data.error);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const renderItem = ({ item }) => (
+    <View style={styles.resultItem}>
+      <Text style={styles.resultTitle}>{item.title}</Text>
+      <Text style={styles.resultChannel}>{item.channel}</Text>
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -31,6 +57,16 @@ function Search() {
           <Text style={styles.buttonText}>Search</Text>
         </TouchableOpacity>
       </View>
+      {loading ? (
+        <Text style={styles.loadingText}>Loading...</Text>
+      ) : (
+        <FlatList
+          data={results}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          style={styles.resultsList}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -75,6 +111,30 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
+    fontSize: 16,
+  },
+  resultsList: {
+    marginTop: 20,
+    width: '80%',
+  },
+  resultItem: {
+    padding: 10,
+    backgroundColor: '#3c3c3c',
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  resultTitle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resultChannel: {
+    color: '#aaa',
+    fontSize: 14,
+  },
+  loadingText: {
+    color: '#fff',
+    marginTop: 20,
     fontSize: 16,
   },
 });

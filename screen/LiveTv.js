@@ -14,7 +14,7 @@ import axios from 'axios';
 const LiveTv = ({ navigation }) => {
   const categories = [
     { name: 'RecentlyWatched', apiParam: 'recently-watched' },
-    { name: 'All Channels', apiParam: 'all-channels' },
+    { name: 'All Channels', apiParam: '*' },
     { name: 'News & Commerce', apiParam: 'news' },
     { name: 'Sports', apiParam: 'sports' },
     { name: 'Lifestyle and Travel', apiParam: 'lifestyle_travel' },
@@ -34,7 +34,7 @@ const LiveTv = ({ navigation }) => {
     setLoading(true);
     setError(false);
     try {
-      const response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
+      const response = await axios.get(`http://192.168.43.247:8085/videos/${apiParam}`);
       setVideos(response.data); // Update state with fetched videos
     } catch (error) {
       console.error('Error fetching videos:', error);

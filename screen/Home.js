@@ -21,7 +21,7 @@ const Home = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedCategoryVideos, setSelectedCategoryVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState({
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4', // Default video
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', // Default video
     title: 'Default Video Title', // Default title
   });
 
