@@ -12,9 +12,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Player from '../components/Player';
 import ContentRow from '../components/ContentRow';
 import BottomSlideModal from '../components/BottomSlideModal';
+import Navbar from '../components/CurvyBottomNav';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const Home = ({ navigation }) => {
+  axios.defaults.withCredentials = true;
   const [authToken, setAuthToken] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
 
@@ -34,11 +37,22 @@ const Home = ({ navigation }) => {
 
     fetchData();
   }, []);
-  const categories = [
-    'News & commerce', 'Movies', 'Kids', 'Sports', 'Music', 'cat6',
+
+  const categoryData = [
+    { name: 'Recently Watched', apiParam: 'recently-watched' },
+    { name: 'All Channels', apiParam: 'all' },
+    { name: 'News & Commerce', apiParam: 'news' },
+    { name: 'Sports', apiParam: 'sports' },
+    { name: 'Lifestyle and Travel', apiParam: 'lifestyle_travel' },
+    { name: 'Music', apiParam: 'music' },
+    { name: 'Kids', apiParam: 'children' },
+    { name: 'Documentaries', apiParam: 'documentary' },
+    { name: 'Religion', apiParam: 'religion' },
+    { name: 'Food', apiParam: 'food' },
   ];
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [videos, setVideos] = useState([]); // State for fetched videos
   const [selectedCategoryVideos, setSelectedCategoryVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState({
     url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', // Default video
@@ -57,22 +71,35 @@ const Home = ({ navigation }) => {
     { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
   ];
 
-  const categoryData = {
-    'News & commerce': [
-      { id: 1, title: 'News Video 1', thumbnail: 'https://via.placeholder.com/150', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-      { id: 2, title: 'News Video 2', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-    ],
-    Movies: [
-      { id: 1, title: 'Movie 1', thumbnail: 'https://via.placeholder.com/150', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
-      { id: 2, title: 'Movie 2', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' },
-    ],
-    // Add other categories...
-  };
 
-  const handleCategoryPress = (category) => {
-    setSelectedCategoryVideos(categoryData[category] || []);
-    setModalVisible(true);
+
+  const handleCategoryPress = async (apiParam) => {
+    // console.log('Selected Category:', apiParam);
+  
+    try {
+      let response;
+      if (apiParam === 'all') {
+        response = await axios.get('http://192.168.43.247:8085/videos/');
+      } else {
+        response = await axios.get(`http://192.168.43.247:8085/videos/${apiParam}`);
+      }  
+      // Update state with fetched data
+      setVideos(response.data);
+      setSelectedCategoryVideos(response.data); // Use response data directly
+      setModalVisible(true); // Show modal with the fetched videos
+  
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        console.log('No videos found for this category.');
+        setVideos([]);  // Set empty array to indicate no videos
+        setSelectedCategoryVideos([]);  // Ensure selected videos are also empty
+        setModalVisible(true);  // Show modal with the "No videos" message
+      } else {
+        console.error('Error fetching videos:', error);
+      }
+    }
   };
+  
 
   const handleVideoPress = (video) => {
     setCurrentVideo({ url: video.url, title: video.title });
@@ -90,9 +117,9 @@ const Home = ({ navigation }) => {
       {/* Scrollable Categories */}
       <View style={styles.scrollWrapper}>
         <ScrollView horizontal contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
-          {categories.map((category, index) => (
-            <TouchableOpacity key={index} style={styles.button} onPress={() => handleCategoryPress(category)}>
-              <Text style={styles.buttonText}>{category}</Text>
+          {categoryData.map((category, index) => (
+            <TouchableOpacity key={index} style={styles.button} onPress={() => handleCategoryPress(category.apiParam)}>
+              <Text style={styles.buttonText}>{category.name}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -102,15 +129,19 @@ const Home = ({ navigation }) => {
       {/* Video Player */}
       <View>
         <Player videoSource={currentVideo.url} />
-        {userInfo ? (
-        <View style={styles.userInfoContainer}>
-          <Text style={styles.infoText}>UserID: {userInfo.id}</Text>
-          <Text style={styles.infoText}>Email: {userInfo.email}</Text>
-          {/* Add other user info as needed */}
-        </View>
-      ) : (
-        <Text style={styles.infoText}>No user info available.</Text>
-      )}
+            {authToken && (
+            <Text style={styles.tokenText}>Auth Token: {authToken}</Text>
+          )}
+
+          {userInfo ? (
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.infoText}>ID: {userInfo.id}</Text>
+              <Text style={styles.infoText}>Email: {userInfo.email}</Text>
+              {/* Add other user info as needed */}
+            </View>
+          ) : (
+            <Text style={styles.infoText}>No user info available.</Text>
+          )}
           <ScrollView style={styles.titleContent}>
             <Text style={styles.title}>{currentVideo.title}</Text>
         </ScrollView>
@@ -133,6 +164,7 @@ const Home = ({ navigation }) => {
         data={selectedCategoryVideos}
         onVideoPress={handleVideoPress}
       />
+      <Navbar />
     </SafeAreaView>
   );
 };

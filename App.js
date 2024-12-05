@@ -3,7 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, SafeAreaView, Image, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwtDecode from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
 import Home from './screen/Home';
 import LiveTv from './screen/LiveTv';
@@ -12,40 +12,39 @@ import TvGuide from './screen/TvGuide';
 import Others from './screen/Others';
 import Play from './screen/Play';
 import Auth from './screen/Auth';
+import Navbar from './components/CurvyBottomNav';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState('Auth'); // Default to Auth
-  const [userData, setuserData] = useState(null); // Store user data
-
+  const [userData, setUserData] = useState(null); // Store user data
   useEffect(() => {
+
     const checkAuth = async () => {
-  try {
-    const token = await AsyncStorage.getItem('authToken');
-    console.log('Retrieved Token:', token); // Debugging
+      try {
+        // const token = await AsyncStorage.getItem('authToken');
+        const token = await AsyncStorage.getItem('authToken');
+        console.log('Retrieved Token:', token); // Debugging
 
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      console.log('Decoded Token:', decodedToken); // Debugging
-
-      // Check if the token is expired
-      if (decodedToken.exp * 1000 > Date.now()) {
-        setuserData({ id: decodedToken.id, username: decodedToken.username });
-        setInitialRoute('Home');
-      } else {
-        console.log('Token expired, removing...');
-        await AsyncStorage.removeItem('authToken');
+        if (token) {
+          const decodedToken = jwt_decode(token);
+    
+          // Check if the token is expired
+          if (decodedToken.exp * 1000 > Date.now()) {
+            setUserData({ id: decodedToken.id, username: decodedToken.username }); // Set user data
+            setInitialRoute('Home'); // Redirect to Home if token is valid
+          } else {
+            await AsyncStorage.removeItem('authToken'); // Remove expired token
+          }
+        }
+      } catch (error) {
+        console.error('Error checking auth token:', error);
+      } finally {
+        setIsLoading(false); // Finished checking auth
       }
-    }
-  } catch (error) {
-    console.error('Error checking auth token:', error);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+    };
 
     checkAuth();
   }, []); 
@@ -57,7 +56,6 @@ export default function App() {
       </SafeAreaView>
     );
   }
-
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
@@ -123,6 +121,7 @@ export default function App() {
             }}
           />
         </Stack.Navigator>
+        {/* <Navbar/> */}
       </NavigationContainer>
     </SafeAreaView>
   );

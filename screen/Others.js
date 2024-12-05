@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+import Navbar from '../components/CurvyBottomNav';
 function OthersScreen() {
   return (
     <SafeAreaView style={styles.container}>
@@ -34,6 +35,7 @@ function OthersScreen() {
           <Text style={styles.optionText}>Settings</Text>
         </View>
         </View>
+        <Navbar />
     </SafeAreaView>
   );
 }

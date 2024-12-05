@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import BottomSlideModal from '../components/BottomSlideModal';
+import Navbar from '../components/CurvyBottomNav';
 
 const TvGuide = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -23,6 +24,7 @@ const TvGuide = () => {
       {/* <BottomSlideModal isVisible={isModalVisible} onClose={closeModal}>
         <Text style={styles.modalText}>This is the modal content!</Text>
       </BottomSlideModal> */}
+      <Navbar />
     </SafeAreaView>
   );
 };

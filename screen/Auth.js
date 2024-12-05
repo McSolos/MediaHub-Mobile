@@ -88,7 +88,7 @@ const LoginSignupScreen = () => {
         console.log("Generated Token:", result.token);
   
         // Optionally save user info (if needed later)
-        await AsyncStorage.setItem('userData', JSON.stringify(result.user));
+        await AsyncStorage.setItem('userInfo', JSON.stringify(result.user));
   
         Alert.alert("Success", "Login successful.");
         navigation.navigate("Home"); // Navigate to home
@@ -99,12 +99,6 @@ const LoginSignupScreen = () => {
       Alert.alert("Error", "Unable to connect to the server.");
     }
   };
-  
-  
-  
-  
-  
-  
 
   return (
     <View style={styles.container}>

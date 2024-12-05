@@ -9,6 +9,7 @@ import {
   FlatList,
 } from 'react-native';
 
+import Navbar from '../components/CurvyBottomNav';
 function Search() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -67,6 +68,7 @@ function Search() {
           style={styles.resultsList}
         />
       )}
+      <Navbar />
     </SafeAreaView>
   );
 }
