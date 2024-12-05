@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { StyleSheet, SafeAreaView, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, Image, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwtDecode from 'jwt-decode';
 
-import Navbar from './components/CurvyBottomNav';
 import Home from './screen/Home';
 import LiveTv from './screen/LiveTv';
 import Search from './screen/Search';
@@ -15,13 +16,57 @@ import Auth from './screen/Auth';
 const Stack = createStackNavigator();
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [initialRoute, setInitialRoute] = useState('Auth'); // Default to Auth
+  const [userData, setuserData] = useState(null); // Store user data
+
+  useEffect(() => {
+    const checkAuth = async () => {
+  try {
+    const token = await AsyncStorage.getItem('authToken');
+    console.log('Retrieved Token:', token); // Debugging
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      console.log('Decoded Token:', decodedToken); // Debugging
+
+      // Check if the token is expired
+      if (decodedToken.exp * 1000 > Date.now()) {
+        setuserData({ id: decodedToken.id, username: decodedToken.username });
+        setInitialRoute('Home');
+      } else {
+        console.log('Token expired, removing...');
+        await AsyncStorage.removeItem('authToken');
+      }
+    }
+  } catch (error) {
+    console.error('Error checking auth token:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+    checkAuth();
+  }, []); 
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#ffffff" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Auth">
+        <Stack.Navigator
+          initialRouteName={initialRoute}
+          screenOptions={{ gestureEnabled: false }} // Disable swipe back gesture
+        >
           <Stack.Screen 
             name="Home" 
-            component={Home} 
             options={{ 
               headerTitle: () => (
                 <Image 
@@ -30,8 +75,10 @@ export default function App() {
                 />
               ),
               headerStyle: { backgroundColor: '#0c0a00' }, 
-            }} 
-          />
+            }}
+          >
+            {props => <Home {...props} userData={userData} />}
+          </Stack.Screen>
           <Stack.Screen 
             name="LiveTv" 
             component={LiveTv} 
@@ -72,10 +119,10 @@ export default function App() {
             component={Auth} 
             options={{
               headerShown: false,
+              gestureEnabled: false, // Prevent swipe back
             }}
           />
         </Stack.Navigator>
-        {/* <Navbar /> */}
       </NavigationContainer>
     </SafeAreaView>
   );
@@ -84,6 +131,12 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'black',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'black',
   },
 });

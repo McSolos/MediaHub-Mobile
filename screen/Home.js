@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,8 +12,28 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Player from '../components/Player';
 import ContentRow from '../components/ContentRow';
 import BottomSlideModal from '../components/BottomSlideModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = ({ navigation }) => {
+  const [authToken, setAuthToken] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve authToken and userInfo from AsyncStorage
+        const token = await AsyncStorage.getItem('authToken');
+        const user = await AsyncStorage.getItem('userInfo');
+
+        setAuthToken(token);
+        setUserInfo(user ? JSON.parse(user) : null);
+      } catch (error) {
+        Alert.alert("Error", "Failed to retrieve data.");
+      }
+    };
+
+    fetchData();
+  }, []);
   const categories = [
     'News & commerce', 'Movies', 'Kids', 'Sports', 'Music', 'cat6',
   ];
@@ -82,8 +102,17 @@ const Home = ({ navigation }) => {
       {/* Video Player */}
       <View>
         <Player videoSource={currentVideo.url} />
-        <ScrollView style={styles.titleContent}>
-          <Text style={styles.title}>{currentVideo.title}</Text>
+        {userInfo ? (
+        <View style={styles.userInfoContainer}>
+          <Text style={styles.infoText}>UserID: {userInfo.id}</Text>
+          <Text style={styles.infoText}>Email: {userInfo.email}</Text>
+          {/* Add other user info as needed */}
+        </View>
+      ) : (
+        <Text style={styles.infoText}>No user info available.</Text>
+      )}
+          <ScrollView style={styles.titleContent}>
+            <Text style={styles.title}>{currentVideo.title}</Text>
         </ScrollView>
       </View>
 
