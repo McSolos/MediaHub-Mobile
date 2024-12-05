@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
+import Navbar from '../components/CurvyBottomNav';
 
 const LiveTv = ({ navigation }) => {
   const categories = [
@@ -49,7 +50,7 @@ const LiveTv = ({ navigation }) => {
       setLoading(false);
     }
   };
-
+  
   useEffect(() => {
     // Fetch videos when activeCategory changes
      
@@ -113,6 +114,7 @@ const LiveTv = ({ navigation }) => {
           ))
         )}
       </ScrollView>
+      <Navbar />
     </SafeAreaView>
   );
 };

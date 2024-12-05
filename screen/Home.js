@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,10 +12,31 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Player from '../components/Player';
 import ContentRow from '../components/ContentRow';
 import BottomSlideModal from '../components/BottomSlideModal';
+import Navbar from '../components/CurvyBottomNav';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const Home = ({ navigation }) => {
   axios.defaults.withCredentials = true;
+  const [authToken, setAuthToken] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve authToken and userInfo from AsyncStorage
+        const token = await AsyncStorage.getItem('authToken');
+        const user = await AsyncStorage.getItem('userInfo');
+
+        setAuthToken(token);
+        setUserInfo(user ? JSON.parse(user) : null);
+      } catch (error) {
+        Alert.alert("Error", "Failed to retrieve data.");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const categoryData = [
     { name: 'Recently Watched', apiParam: 'recently-watched' },
@@ -34,7 +55,7 @@ const Home = ({ navigation }) => {
   const [videos, setVideos] = useState([]); // State for fetched videos
   const [selectedCategoryVideos, setSelectedCategoryVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState({
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4', // Default video
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4', // Default video
     title: 'Default Video Title', // Default title
   });
 
@@ -50,15 +71,17 @@ const Home = ({ navigation }) => {
     { id: 3, title: 'Top Pick 3', thumbnail: 'https://via.placeholder.com/150', url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4' },
   ];
 
+
+
   const handleCategoryPress = async (apiParam) => {
     // console.log('Selected Category:', apiParam);
   
     try {
       let response;
       if (apiParam === 'all') {
-        response = await axios.get('http://localhost:8085/videos/');
+        response = await axios.get('http://192.168.43.247:8085/videos/');
       } else {
-        response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
+        response = await axios.get(`http://192.168.43.247:8085/videos/${apiParam}`);
       }  
       // Update state with fetched data
       setVideos(response.data);
@@ -77,7 +100,7 @@ const Home = ({ navigation }) => {
     }
   };
   
-  
+
   const handleVideoPress = (video) => {
     setCurrentVideo({ url: video.video_url, title: video.title });
     setModalVisible(false); // Close the modal
@@ -103,8 +126,21 @@ const Home = ({ navigation }) => {
       {/* Video Player */}
       <View>
         <Player videoSource={currentVideo.url} />
-        <ScrollView style={styles.titleContent}>
-          <Text style={styles.title}>{currentVideo.title}</Text>
+            {authToken && (
+            <Text style={styles.tokenText}>Auth Token: {authToken}</Text>
+          )}
+
+          {userInfo ? (
+            <View style={styles.userInfoContainer}>
+              <Text style={styles.infoText}>ID: {userInfo.id}</Text>
+              <Text style={styles.infoText}>Email: {userInfo.email}</Text>
+              {/* Add other user info as needed */}
+            </View>
+          ) : (
+            <Text style={styles.infoText}>No user info available.</Text>
+          )}
+          <ScrollView style={styles.titleContent}>
+            <Text style={styles.title}>{currentVideo.title}</Text>
         </ScrollView>
       </View>
 
@@ -124,6 +160,7 @@ const Home = ({ navigation }) => {
         data={selectedCategoryVideos}
         onVideoPress={handleVideoPress}
       />
+      <Navbar />
     </SafeAreaView>
   );
 };
