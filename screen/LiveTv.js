@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
 import Navbar from '../components/CurvyBottomNav';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LiveTv = ({ navigation }) => {
   const categories = [
@@ -32,15 +33,33 @@ const LiveTv = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   axios.defaults.withCredentials = true;
+
+  axios.defaults.withCredentials = true;
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Retrieve authToken and userInfo from AsyncStorage
+        const user = await AsyncStorage.getItem('userInfo');
+        setUserInfo(user ? JSON.parse(user) : null);
+      } catch (error) {
+        Alert.alert("Error", "Failed to retrieve data.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const fetchVideos = async (apiParam) => {
     setLoading(true);
     setError(false);
     try {
       if (apiParam === 'all'){
-      const response = await axios.get('http://localhost:8085/videos/');
+      const response = await axios.get('http://10.50.7.119:8085/videos/');
       setVideos(response.data); // Update state with fetched videos
       }else{
-      const response = await axios.get(`http://localhost:8085/videos/${apiParam}`);
+      const response = await axios.get(`http://10.50.7.119:8085/videos/${apiParam}`);
       setVideos(response.data); // Update state with fetched videos
       }
     } catch (error) {
@@ -50,7 +69,16 @@ const LiveTv = ({ navigation }) => {
       setLoading(false);
     }
   };
-  
+
+  const addToHistory = async (userId, videoId) => {
+    const data = { userId, videoId };
+    try {
+        const response = await axios.post('http://10.50.7.119:8085/videos/add-history', data);
+        console.log('History updated successfully:', response.data.message);
+    } catch (error) {
+        console.error('Error adding video to history:', error.response ? error.response.data.message : error.message);
+    }
+  }
   useEffect(() => {
     // Fetch videos when activeCategory changes
      
@@ -102,11 +130,10 @@ const LiveTv = ({ navigation }) => {
             <TouchableOpacity
               key={item.id}
               style={styles.contentItem}
-              onPress={() =>
-                navigation.navigate('Play', {
-                  videoDetails: item,
-                })
-              }
+              onPress={() => {
+                addToHistory(userInfo.id, item.id);
+                navigation.navigate('Play', { videoDetails: item });
+              }}
             >
               <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
               <Text style={styles.title}>{item.title}</Text>

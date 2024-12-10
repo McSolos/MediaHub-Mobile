@@ -21,7 +21,7 @@ const LoginSignupScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigation = useNavigation(); // Get navigation prop
 
-  const API_BASE = "http://192.168.43.247:8085"; // Replace with your backend URL
+  const API_BASE = "http://10.50.7.119:8085"; // Replace with your backend URL
 
   const handleSignup = async () => {
     if (password.length < 8) {

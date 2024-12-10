@@ -79,9 +79,9 @@ const Home = ({ navigation }) => {
     try {
       let response;
       if (apiParam === 'all') {
-        response = await axios.get('http://192.168.43.247:8085/videos/');
+        response = await axios.get('http://10.50.7.119:8085/videos/');
       } else {
-        response = await axios.get(`http://192.168.43.247:8085/videos/${apiParam}`);
+        response = await axios.get(`http://10.50.7.119:8085/videos/${apiParam}`);
       }  
       // Update state with fetched data
       setVideos(response.data);
@@ -104,8 +104,18 @@ const Home = ({ navigation }) => {
   const handleVideoPress = (video) => {
     setCurrentVideo({ url: video.video_url, title: video.title });
     setModalVisible(false); // Close the modal
+    addToHistory(userInfo.id, video.id); 
   };
   
+  const addToHistory = async (userId, videoId) => {
+    const data = { userId, videoId };
+    try {
+        const response = await axios.post('http://10.50.7.119:8085/videos/add-history', data);
+        console.log('History updated successfully:', response.data.message);
+    } catch (error) {
+        console.error('Error adding video to history:', error.response ? error.response.data.message : error.message);
+    }
+};
 
   return (
     <SafeAreaView style={styles.container}>

@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 8,
+    position: 'relative',
+    bottom: 0,
   },
   navButton: {
     alignItems: 'center',

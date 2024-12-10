@@ -7,29 +7,64 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Image,
+  Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const History = ({ navigation }) => {
- 
-
-  const [activeCategory, setActiveCategory] = useState(categories[0].name);
   const [videos, setVideos] = useState([]); // State for fetched videos
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true); // Start loading state as true
+  const [error, setError] = useState(null); // Error state to store error messages
+  const [userInfo, setUserInfo] = useState(null); // User info state
   axios.defaults.withCredentials = true;
 
+  // Fetch user data from AsyncStorage
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await AsyncStorage.getItem('userInfo');
+        if (user) {
+          setUserInfo(JSON.parse(user));
+        } else {
+          setError('User info not found.');
+        }
+      } catch (error) {
+        Alert.alert("Error", "Failed to retrieve data.");
+      }
+    };
+    fetchData();
+  }, []);
+
+  // Fetch video history after userInfo is set
+  useEffect(() => {
+    if (!userInfo) return; // Don't fetch if userInfo is not yet loaded
+
+    const fetchHistory = async () => {
+      try {
+        setLoading(true); // Set loading state to true before API call
+        const response = await axios.get('http://10.50.7.119:8085/videos/history', {
+          params: { userId: userInfo.id }
+        });
+        setVideos(response.data);
+        setLoading(false); // Set loading state to false after data is fetched
+      } catch (error) {
+        setError('Failed to load History.');
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, [userInfo]); // Fetch when userInfo changes
 
   return (
     <SafeAreaView style={styles.container}>
-    
       <ScrollView style={styles.contentScrollView}>
         {loading ? (
           <Text style={styles.loadingText}>Loading...</Text>
         ) : error ? (
-          <Text style={styles.errorText}>Videos not found</Text>
-        ) :(
+          <Text style={styles.errorText}>{error}</Text>
+        ) : (
           videos.map((item) => (
             <TouchableOpacity
               key={item.id}
@@ -55,36 +90,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#2C2C2C',
     paddingBottom: 80,
-  },
-  scrollWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 40,
-    paddingHorizontal: 10,
-  },
-  scrollContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  arrow: {
-    paddingHorizontal: 4,
-  },
-  button: {
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    marginHorizontal: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 14,
-    textAlign: 'center',
-  },
-  activeButton: {
-    borderBottomWidth: 2,
-    borderBottomColor: 'red',
-  },
-  activeButtonText: {
-    color: 'red',
   },
   contentScrollView: {
     flex: 1,

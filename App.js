@@ -11,6 +11,8 @@ import Search from './screen/Search';
 import TvGuide from './screen/TvGuide';
 import Others from './screen/Others';
 import Play from './screen/Play';
+import History from './screen/history';
+import Favorites from './screen/favorites';
 import Auth from './screen/Auth';
 import Navbar from './components/CurvyBottomNav';
 
@@ -109,6 +111,20 @@ export default function App() {
           <Stack.Screen 
             name="Play" 
             component={Play} 
+            options={{
+              headerShown: false, 
+            }}
+          />
+          <Stack.Screen 
+            name="History" 
+            component={History}  
+            options={{
+              headerShown: false, 
+            }}
+          />
+          <Stack.Screen 
+            name="Favorites" 
+            component={Favorites} 
             options={{
               headerShown: false, 
             }}

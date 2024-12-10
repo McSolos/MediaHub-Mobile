@@ -1,9 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
 
 import Navbar from '../components/CurvyBottomNav';
+
 function OthersScreen() {
+  const navigation = useNavigation();
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Profile Section */}
@@ -18,14 +22,18 @@ function OthersScreen() {
 
       {/* Options Section */}
       <View style={styles.optionsSection}>
-        <View style={styles.optionRow}>
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate('Favorites')}>
           <FontAwesome name="star" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.optionText}>Favourites</Text>
-        </View>
-        <View style={styles.optionRow}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionRow}
+          onPress={() => navigation.navigate('History')}>
           <FontAwesome name="history" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.optionText}>History</Text>
-        </View>
+        </TouchableOpacity>
         <View style={styles.optionRow}>
           <FontAwesome name="sliders" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.optionText}>Preferences</Text>
@@ -34,8 +42,8 @@ function OthersScreen() {
           <FontAwesome name="cog" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.optionText}>Settings</Text>
         </View>
-        </View>
-        <Navbar />
+      </View>
+      <Navbar />
     </SafeAreaView>
   );
 }
@@ -91,5 +99,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
   },
-  
 });

@@ -10,17 +10,52 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import axios from 'axios';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Favorites = ({ navigation }) => {
  
 
-  const [activeCategory, setActiveCategory] = useState(categories[0].name);
+  // const [activeCategory, setActiveCategory] = useState(categories[0].name);
   const [videos, setVideos] = useState([]); // State for fetched videos
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [userInfo, setUserInfo] = useState(null); // User info state
   axios.defaults.withCredentials = true;
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await AsyncStorage.getItem('userInfo');
+        if (user) {
+          setUserInfo(JSON.parse(user));
+        } else {
+          setError('User info not found.');
+        }
+      } catch (error) {
+        Alert.alert("Error", "Failed to retrieve data.");
+      }
+    };
+    fetchData();
+  }, []);
 
+  useEffect(() => {
+    if (!userInfo) return; // Don't fetch if userInfo is not yet loaded
+
+    const fetchFavorites = async () => {
+      try {
+        setLoading(true); // Set loading state to true before API call
+        const response = await axios.get('http://10.50.7.119:8085/videos/favorite', {
+          params: { userId: userInfo.id }
+        });
+        setVideos(response.data);
+        setLoading(false); // Set loading state to false after data is fetched
+      } catch (error) {
+        setError('Failed to load Favorites.');
+        setLoading(false);
+      }
+    };
+
+    fetchFavorites();
+  }, [userInfo]);
   return (
     <SafeAreaView style={styles.container}>
     
@@ -28,7 +63,7 @@ const Favorites = ({ navigation }) => {
         {loading ? (
           <Text style={styles.loadingText}>Loading...</Text>
         ) : error ? (
-          <Text style={styles.errorText}>Videos not found</Text>
+          <Text style={styles.errorText}>{error}</Text>
         ) :(
           videos.map((item) => (
             <TouchableOpacity
